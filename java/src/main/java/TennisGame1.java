@@ -23,22 +23,7 @@ public class TennisGame1 implements TennisGame {
         int tempScore=0;
         if (m_score1==m_score2)
         {
-            switch (m_score1)
-            {
-                case 0:
-                        score = "Love-All";
-                    break;
-                case 1:
-                        score = "Fifteen-All";
-                    break;
-                case 2:
-                        score = "Thirty-All";
-                    break;
-                default:
-                        score = "Deuce";
-                    break;
-                
-            }
+            score = getDrawScore();
         }
         else if (m_score1>=4 || m_score2>=4)
         {
@@ -70,6 +55,27 @@ public class TennisGame1 implements TennisGame {
                         break;
                 }
             }
+        }
+        return score;
+    }
+
+    private String getDrawScore() {
+        String score;
+        switch (m_score1)
+        {
+            case 0:
+                    score = "Love-All";
+                break;
+            case 1:
+                    score = "Fifteen-All";
+                break;
+            case 2:
+                    score = "Thirty-All";
+                break;
+            default:
+                    score = "Deuce";
+                break;
+
         }
         return score;
     }
