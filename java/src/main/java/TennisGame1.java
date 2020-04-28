@@ -32,18 +32,7 @@ public class TennisGame1 implements TennisGame {
     }
 
     private String getMidGameScore() {
-        String score = "";
-        int tempScore;
-        for (int i = 1; i < 3; i++) {
-            if (i == 1) {
-                tempScore = player1Points;
-            } else {
-                score += "-";
-                tempScore = player2Points;
-            }
-            score += mapPointsToScore(tempScore);
-        }
-        return score;
+        return mapPointsToScore(player1Points) + "-" + mapPointsToScore(player2Points);
     }
 
 
