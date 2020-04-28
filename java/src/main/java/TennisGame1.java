@@ -2,8 +2,11 @@
 public class TennisGame1 implements TennisGame {
 
     public static final int ADVANTAGE_SCORING_THRESHOLD = 4;
+    public static final int DEUCE_THRESHOLD = 3;
+
     private int player1Points = 0;
     private int player2Points = 0;
+
     private final String player1Name;
     private final String player2Name;
 
@@ -59,7 +62,7 @@ public class TennisGame1 implements TennisGame {
     }
 
     private String getDrawScore(int points) {
-        if (points > 2) {
+        if (points >= DEUCE_THRESHOLD) {
             return "Deuce";
         }
         return mapPointsToScore(points) + "-All";
