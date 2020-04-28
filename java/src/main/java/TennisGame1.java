@@ -46,25 +46,6 @@ public class TennisGame1 implements TennisGame {
         return score;
     }
 
-    private String mapPointsToScore(int tempScore) {
-        String score = "";
-        switch (tempScore) {
-            case 0:
-                score += "Love";
-                break;
-            case 1:
-                score += "Fifteen";
-                break;
-            case 2:
-                score += "Thirty";
-                break;
-            case 3:
-                score += "Forty";
-                break;
-        }
-        return score;
-    }
-
 
     private boolean isEndGame() {
         return player1Points >= 4 || player2Points >= 4;
@@ -93,22 +74,16 @@ public class TennisGame1 implements TennisGame {
     }
 
     private String getDrawScore() {
-        String score;
-        switch (player1Points) {
-            case 0:
-                score = "Love-All";
-                break;
-            case 1:
-                score = "Fifteen-All";
-                break;
-            case 2:
-                score = "Thirty-All";
-                break;
-            default:
-                score = "Deuce";
-                break;
-
+        var points = player1Points;
+        if (points > 2) {
+            return "Deuce";
         }
-        return score;
+        return mapPointsToScore(points) + "-All";
     }
+
+    private String mapPointsToScore(int tempScore) {
+        String[] scores = {"Love", "Fifteen", "Thirty", "Forty"};
+        return scores[tempScore];
+    }
+
 }
