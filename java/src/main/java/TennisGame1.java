@@ -68,10 +68,10 @@ public class TennisGame1 implements TennisGame {
         String score = "";
         int differenceInScore = m_score1 - m_score2;
 
-        boolean isSmallAdvantage = Math.abs(differenceInScore) == 1;
-        if (isSmallAdvantage) {
+        boolean hasSmallAdvantage = Math.abs(differenceInScore) == 1;
+        if (hasSmallAdvantage) {
             score = "Advantage " + getWinningPlayer();
-        } else if (Math.abs(differenceInScore) >= 2) {
+        } else {
             score = "Win for " + getWinningPlayer();
         }
         return score;
