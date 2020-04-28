@@ -1,8 +1,8 @@
 
 public class TennisGame1 implements TennisGame {
 
-    private int m_score1 = 0;
-    private int m_score2 = 0;
+    private int player1Points = 0;
+    private int player2Points = 0;
     private String player1Name;
     private String player2Name;
 
@@ -13,9 +13,9 @@ public class TennisGame1 implements TennisGame {
 
     public void wonPoint(String playerName) {
         if (playerName.equals(this.player1Name)) {
-            m_score1 += 1;
+            player1Points += 1;
         } else {
-            m_score2 += 1;
+            player2Points += 1;
         }
     }
 
@@ -36,10 +36,10 @@ public class TennisGame1 implements TennisGame {
         int tempScore;
         for (int i = 1; i < 3; i++) {
             if (i == 1) {
-                tempScore = m_score1;
+                tempScore = player1Points;
             } else {
                 score += "-";
-                tempScore = m_score2;
+                tempScore = player2Points;
             }
             score += mapPointsToScore(tempScore);
         }
@@ -67,12 +67,12 @@ public class TennisGame1 implements TennisGame {
 
 
     private boolean isEndGame() {
-        return m_score1 >= 4 || m_score2 >= 4;
+        return player1Points >= 4 || player2Points >= 4;
     }
 
     private String getEndGameScore() {
         String score;
-        int differenceInScore = Math.abs(m_score1 - m_score2);
+        int differenceInScore = Math.abs(player1Points - player2Points);
         boolean hasSmallAdvantage = differenceInScore == 1;
 
         if (hasSmallAdvantage) {
@@ -85,16 +85,16 @@ public class TennisGame1 implements TennisGame {
     }
 
     private String getWinningPlayer() {
-        return m_score1 > m_score2 ? player1Name : player2Name;
+        return player1Points > player2Points ? player1Name : player2Name;
     }
 
     private boolean isDraw() {
-        return m_score1 == m_score2;
+        return player1Points == player2Points;
     }
 
     private String getDrawScore() {
         String score;
-        switch (m_score1) {
+        switch (player1Points) {
             case 0:
                 score = "Love-All";
                 break;
