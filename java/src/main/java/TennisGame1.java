@@ -23,7 +23,7 @@ public class TennisGame1 implements TennisGame {
     public String getScore() {
         String score = "";
         if (isDraw()) {
-            score = getDrawScore();
+            score = getDrawScore(player1Points);
         } else if (isAdvantageScoring()) {
             score = getAdvantageScore();
         } else {
@@ -42,17 +42,12 @@ public class TennisGame1 implements TennisGame {
     }
 
     private String getAdvantageScore() {
-        String score;
         int differenceInScore = Math.abs(player1Points - player2Points);
         boolean hasSmallAdvantage = differenceInScore == 1;
-
         if (hasSmallAdvantage) {
-            score = "Advantage " + getWinningPlayer();
-        } else {
-            score = "Win for " + getWinningPlayer();
+            return "Advantage " + getWinningPlayer();
         }
-
-        return score;
+        return "Win for " + getWinningPlayer();
     }
 
     private String getWinningPlayer() {
@@ -63,16 +58,15 @@ public class TennisGame1 implements TennisGame {
         return player1Points == player2Points;
     }
 
-    private String getDrawScore() {
-        var points = player1Points;
+    private String getDrawScore(int points) {
         if (points > 2) {
             return "Deuce";
         }
         return mapPointsToScore(points) + "-All";
     }
 
-    private String mapPointsToScore(int tempScore) {
+    private String mapPointsToScore(int points) {
         String[] scores = {"Love", "Fifteen", "Thirty", "Forty"};
-        return scores[tempScore];
+        return scores[points];
     }
 }
