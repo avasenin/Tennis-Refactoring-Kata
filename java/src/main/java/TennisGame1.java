@@ -41,20 +41,26 @@ public class TennisGame1 implements TennisGame {
                 score += "-";
                 tempScore = m_score2;
             }
-            switch (tempScore) {
-                case 0:
-                    score += "Love";
-                    break;
-                case 1:
-                    score += "Fifteen";
-                    break;
-                case 2:
-                    score += "Thirty";
-                    break;
-                case 3:
-                    score += "Forty";
-                    break;
-            }
+            score += mapPointsToScore(tempScore);
+        }
+        return score;
+    }
+
+    private String mapPointsToScore(int tempScore) {
+        String score = "";
+        switch (tempScore) {
+            case 0:
+                score += "Love";
+                break;
+            case 1:
+                score += "Fifteen";
+                break;
+            case 2:
+                score += "Thirty";
+                break;
+            case 3:
+                score += "Forty";
+                break;
         }
         return score;
     }
@@ -65,15 +71,16 @@ public class TennisGame1 implements TennisGame {
     }
 
     private String getEndGameScore() {
-        String score = "";
-        int differenceInScore = m_score1 - m_score2;
+        String score;
+        int differenceInScore = Math.abs(m_score1 - m_score2);
+        boolean hasSmallAdvantage = differenceInScore == 1;
 
-        boolean hasSmallAdvantage = Math.abs(differenceInScore) == 1;
         if (hasSmallAdvantage) {
             score = "Advantage " + getWinningPlayer();
         } else {
             score = "Win for " + getWinningPlayer();
         }
+
         return score;
     }
 
