@@ -1,6 +1,7 @@
 
 public class TennisGame1 implements TennisGame {
 
+    public static final int ADVANTAGE_SCORING_THRESHOLD = 4;
     private int player1Points = 0;
     private int player2Points = 0;
     private final String player1Name;
@@ -23,8 +24,8 @@ public class TennisGame1 implements TennisGame {
         String score = "";
         if (isDraw()) {
             score = getDrawScore();
-        } else if (isEndGame()) {
-            score = getEndGameScore();
+        } else if (isAdvantageScoring()) {
+            score = getAdvantageScore();
         } else {
             score = getMidGameScore();
         }
@@ -36,11 +37,11 @@ public class TennisGame1 implements TennisGame {
     }
 
 
-    private boolean isEndGame() {
-        return player1Points >= 4 || player2Points >= 4;
+    private boolean isAdvantageScoring() {
+        return Math.max(player1Points, player2Points) >= ADVANTAGE_SCORING_THRESHOLD;
     }
 
-    private String getEndGameScore() {
+    private String getAdvantageScore() {
         String score;
         int differenceInScore = Math.abs(player1Points - player2Points);
         boolean hasSmallAdvantage = differenceInScore == 1;
@@ -74,5 +75,4 @@ public class TennisGame1 implements TennisGame {
         String[] scores = {"Love", "Fifteen", "Thirty", "Forty"};
         return scores[tempScore];
     }
-
 }
