@@ -27,24 +27,24 @@ public class TennisGame1 implements TennisGame {
         } else if (isAdvantageScoring()) {
             score = getAdvantageScore();
         } else {
-            score = getMidGameScore();
+            score = getOngoingGameScore();
         }
         return score;
     }
 
-    private String getMidGameScore() {
+    private String getOngoingGameScore() {
         return mapPointsToScore(player1Points) + "-" + mapPointsToScore(player2Points);
     }
-
 
     private boolean isAdvantageScoring() {
         return Math.max(player1Points, player2Points) >= ADVANTAGE_SCORING_THRESHOLD;
     }
 
     private String getAdvantageScore() {
-        int differenceInScore = Math.abs(player1Points - player2Points);
-        boolean hasSmallAdvantage = differenceInScore == 1;
-        if (hasSmallAdvantage) {
+        int differenceInPoints = Math.abs(player1Points - player2Points);
+        if (differenceInPoints == 0) {
+            return "Deuce";
+        } else if (differenceInPoints == 1) {
             return "Advantage " + getWinningPlayer();
         }
         return "Win for " + getWinningPlayer();
