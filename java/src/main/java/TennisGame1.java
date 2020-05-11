@@ -1,3 +1,4 @@
+import java.util.Optional;
 
 public class TennisGame1 implements TennisGame {
 
@@ -25,8 +26,8 @@ public class TennisGame1 implements TennisGame {
 
     public String getScore() {
         String score = "";
-        if (isDraw()) {
-            score = getDrawScore(player1Points);
+        if (isTie()) {
+            score = getTieScore(player1Points);
         } else if (isAdvantageScoring()) {
             score = getAdvantageScore();
         } else {
@@ -45,9 +46,7 @@ public class TennisGame1 implements TennisGame {
 
     private String getAdvantageScore() {
         int differenceInPoints = Math.abs(player1Points - player2Points);
-        if (differenceInPoints == 0) {
-            return "Deuce";
-        } else if (differenceInPoints == 1) {
+        if (differenceInPoints == 1) {
             return "Advantage " + getWinningPlayer();
         }
         return "Win for " + getWinningPlayer();
@@ -57,11 +56,18 @@ public class TennisGame1 implements TennisGame {
         return player1Points > player2Points ? player1Name : player2Name;
     }
 
-    private boolean isDraw() {
+    private Optional<String> tieScoreProvider() {
+        if (player1Points == player2Points && player1Points < DEUCE_THRESHOLD) {
+            return Optional.of(mapPointsToScore(player1Points) + "-All");
+        }
+        return Optional.empty();
+    }
+
+    private boolean isTie() {
         return player1Points == player2Points;
     }
 
-    private String getDrawScore(int points) {
+    private String getTieScore(int points) {
         if (points >= DEUCE_THRESHOLD) {
             return "Deuce";
         }
@@ -71,5 +77,9 @@ public class TennisGame1 implements TennisGame {
     private String mapPointsToScore(int points) {
         String[] scores = {"Love", "Fifteen", "Thirty", "Forty"};
         return scores[points];
+    }
+
+    interface ScoreNameProvider {
+        Optional<String> getScoreNameIfApplicable();
     }
 }
