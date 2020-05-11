@@ -1,77 +1,58 @@
-import java.util.Optional;
+import java.util.stream.Stream;
 
 public class TennisGame1 implements TennisGame {
 
-    public static final int ADVANTAGE_SCORING_THRESHOLD = 4;
-    public static final int DEUCE_THRESHOLD = 3;
+    public static final int POINTS_TO_DEUCE = 3;
+    public static final int POINTS_TO_WIN = 4;
 
-    private int player1Points = 0;
-    private int player2Points = 0;
-
-    private final String player1Name;
-    private final String player2Name;
+    private final Player player1;
+    private final Player player2;
 
     public TennisGame1(String player1Name, String player2Name) {
-        this.player1Name = player1Name;
-        this.player2Name = player2Name;
+        this.player1 = new Player(player1Name);
+        this.player2 = new Player(player2Name);
     }
 
     public void wonPoint(String playerName) {
-        if (playerName.equals(this.player1Name)) {
-            player1Points += 1;
-        } else {
-            player2Points += 1;
-        }
+        Stream.of(player1, player2)
+                .filter(p -> p.name.equals(playerName))
+                .forEach(Player::addPoint);
     }
 
     public String getScore() {
-        String score = "";
+        if (isDeuce()) {
+            return "Deuce";
+        }
         if (isTie()) {
-            score = getTieScore(player1Points);
-        } else if (isAdvantageScoring()) {
-            score = getAdvantageScore();
-        } else {
-            score = getOngoingGameScore();
+            return mapPointsToScore(player1.points) + "-All";
         }
-        return score;
-    }
-
-    private String getOngoingGameScore() {
-        return mapPointsToScore(player1Points) + "-" + mapPointsToScore(player2Points);
-    }
-
-    private boolean isAdvantageScoring() {
-        return Math.max(player1Points, player2Points) >= ADVANTAGE_SCORING_THRESHOLD;
-    }
-
-    private String getAdvantageScore() {
-        int differenceInPoints = Math.abs(player1Points - player2Points);
-        if (differenceInPoints == 1) {
-            return "Advantage " + getWinningPlayer();
+        if (isWin()) {
+            return "Win for " + Player.winning(player1, player2).name;
         }
-        return "Win for " + getWinningPlayer();
-    }
-
-    private String getWinningPlayer() {
-        return player1Points > player2Points ? player1Name : player2Name;
-    }
-
-    private Optional<String> tieScoreProvider() {
-        if (player1Points == player2Points && player1Points < DEUCE_THRESHOLD) {
-            return Optional.of(mapPointsToScore(player1Points) + "-All");
+        if (isAdvantage()) {
+            return "Advantage " + Player.winning(player1, player2).name;
         }
-        return Optional.empty();
+        return mapPointsToScore(player1.points) + "-" + mapPointsToScore(player2.points);
     }
 
     private boolean isTie() {
-        return player1Points == player2Points;
+        return player1.points == player2.points;
     }
 
-    private String getTieScore(int points) {
-        if (points >= DEUCE_THRESHOLD) {
-            return "Deuce";
-        }
-        return mapPointsToScore(points) + "-All";
+    private boolean isDeuce() {
+        return isTie() && player1.points >= POINTS_TO_DEUCE;
+    }
+
+    private boolean isWin() {
+        return hasPointsEnoughToWin() && Math.abs(player1.points - player2.points) > 1;
+    }
+
+    private boolean isAdvantage() {
+        return hasPointsEnoughToWin() && Math.abs(player1.points - player2.points) == 1;
+    }
+
+    private boolean hasPointsEnoughToWin() {
+        return Math.max(player1.points, player2.points) >= POINTS_TO_WIN;
     }
 
     private String mapPointsToScore(int points) {
@@ -79,7 +60,20 @@ public class TennisGame1 implements TennisGame {
         return scores[points];
     }
 
-    interface ScoreNameProvider {
-        Optional<String> getScoreNameIfApplicable();
+    private static class Player {
+        final String name;
+        int points = 0;
+
+        Player(String name) {
+            this.name = name;
+        }
+
+        void addPoint() {
+            points += 1;
+        }
+
+        static Player winning(Player p1, Player p2) {
+            return p1.points < p2.points ? p2 : p1;
+        }
     }
 }
